@@ -1,9 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Room
+rooms=[
+    {'id':1,'name':'lets learn python '},
+    {'id':2,'name':'design with me'},
+    {'id':3,'name':'front end developers '},
+
+]
 
 def home(request):
-    return HttpResponse('Home page')
-def room(request):
-    return HttpResponse('Room')
+    rooms=Room.objects.all() 
+    context={'rooms':rooms}
+    return render(request,'main/home.html',context)
+def room(request,pk):
+    room = Room.objects.get(id = pk)
+    context = {'room':room}
 
-# Create your views here.
+    return render(request,'main/room.html',context)
+

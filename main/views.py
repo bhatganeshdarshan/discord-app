@@ -2,12 +2,27 @@ from django.shortcuts import render ,redirect
 from .models import Room,Topic
 from .forms import RoomForm
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib import messages
 # rooms=[
 #     {'id':1,'name':'lets learn python '},
 #     {'id':2,'name':'design with me'},
 #     {'id':3,'name':'front end developers '},
 
 # ]
+
+def loginPage(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, 'User Doesnot exist')
+    context = {}
+    return render(request,'main/login_register.html',context)
+
 
 def home(request):
     q =  request.GET.get('q') if request.GET.get('q') != None else ''

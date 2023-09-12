@@ -4,6 +4,7 @@ from .forms import RoomForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import login,logout,authenticate
 # rooms=[
 #     {'id':1,'name':'lets learn python '},
 #     {'id':2,'name':'design with me'},
@@ -20,8 +21,20 @@ def loginPage(request):
             user = User.objects.get(username=username)
         except:
             messages.error(request, 'User Doesnot exist')
+        user = authenticate(request,username=username,password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username or Password doesnot match')
+
     context = {}
     return render(request,'main/login_register.html',context)
+
+def logoutPage(request):
+    logout(request)
+    return redirect('home')
 
 
 def home(request):
